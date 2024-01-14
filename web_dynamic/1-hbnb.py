@@ -8,7 +8,8 @@ from models.place import Place
 from os import environ
 from flask import Flask, render_template
 import uuid
-app = Flask(__name__)
+from api.v1.app import app
+
 # app.jinja_env.trim_blocks = True
 # app.jinja_env.lstrip_blocks = True
 
@@ -44,4 +45,10 @@ def hbnb():
 
 if __name__ == "__main__":
     """ Main Function """
-    app.run(host='0.0.0.0', port=5000)
+    host = environ.get('HBNB_API_HOST')
+    port = environ.get('HBNB_API_PORT')
+    if not host:
+        host = '0.0.0.0'
+    if not port:
+        port = '5001'
+    app.run(host=host, port=port, threaded=True)
