@@ -7,11 +7,12 @@ from flask import Flask, render_template, make_response, jsonify
 from flask_cors import CORS
 from flasgger import Swagger
 from flasgger.utils import swag_from
+from web_dynamic import *
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder='web_dynamic/templates')
 app.config['JSONIFY_PRETTYPRINT_REGULAR'] = True
 app.register_blueprint(app_views)
-cors = CORS(app, resources={r"/api/v1": {"origins": "*"}})
+cors = CORS(app, resources={r"/api/v1/*": {"origins": "*"}})
 
 
 @app.teardown_appcontext
@@ -30,6 +31,7 @@ def not_found(error):
     """
     return make_response(jsonify({'error': "Not found"}), 404)
 
+
 app.config['SWAGGER'] = {
     'title': 'AirBnB clone Restful API',
     'uiversion': 3
@@ -45,5 +47,5 @@ if __name__ == "__main__":
     if not host:
         host = '0.0.0.0'
     if not port:
-        port = '5000'
-    app.run(host=host, port=port, threaded=True)
+        port = 5001
+    app.run(host=host, port=port, threaded=True, debug=True)
